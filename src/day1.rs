@@ -1,6 +1,10 @@
 #[aoc_generator(day1)]
 pub fn generator_day1(input: &str) -> Vec<u32> {
-    input.lines().map(|l| l.parse().unwrap()).collect()
+    let mut res: Vec<u32> = vec![];
+    for line in input.lines() {
+        res.push(line.parse().unwrap());
+    }
+    res
 }
 
 #[aoc(day1, part1)]
