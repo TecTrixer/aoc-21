@@ -17,7 +17,7 @@ pub fn solve_day1_part1(input: &Vec<u32>) -> u32 {
 pub fn solve_day1_part2(input: &Vec<u32>) -> u32 {
     let mut counter = 0;
     for i in 3..input.len() {
-        if input[i] + input[i - 1] + input[i - 2] > input[i - 1] + input[i - 2] + input[i - 3] {
+        if input[i] > input[i - 3] {
             counter += 1;
         }
     }
