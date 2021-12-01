@@ -1,0 +1,25 @@
+#[aoc_generator(day1)]
+pub fn generator_day1(input: &str) -> Vec<u32> {
+    input.lines().map(|l| l.parse().unwrap()).collect()
+}
+
+#[aoc(day1, part1)]
+pub fn solve_day1_part1(input: &Vec<u32>) -> u32 {
+    let mut counter = 0;
+    for i in 1..input.len() {
+        if input[i] > input[i - 1] {
+            counter += 1;
+        }
+    }
+    counter
+}
+#[aoc(day1, part2)]
+pub fn solve_day1_part2(input: &Vec<u32>) -> u32 {
+    let mut counter = 0;
+    for i in 3..input.len() {
+        if input[i] + input[i - 1] + input[i - 2] > input[i - 1] + input[i - 2] + input[i - 3] {
+            counter += 1;
+        }
+    }
+    counter
+}
