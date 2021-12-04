@@ -1,7 +1,7 @@
 type Line = Vec<Vec<u64>>;
-type inp = (Vec<u64>, Vec<Line>);
+type Inp = (Vec<u64>, Vec<Line>);
 #[aoc_generator(day4)]
-pub fn generator_day4(input: &str) -> inp {
+pub fn generator_day4(input: &str) -> Inp {
     let mut nums: Vec<u64> = vec![];
     let mut iter = input.lines();
     for i in iter.next().unwrap().trim().split(',') {
@@ -27,7 +27,7 @@ pub fn generator_day4(input: &str) -> inp {
 }
 
 #[aoc(day4, part1)]
-pub fn solve_day4_part1(input: &inp) -> u64 {
+pub fn solve_day4_part1(input: &Inp) -> u64 {
     let mut nums: Vec<u64> = vec![];
     for num in &input.0 {
         nums.push(*num);
@@ -81,7 +81,7 @@ fn check(nums: &Vec<u64>, bingo_sheet: &Vec<Vec<u64>>) -> bool {
 }
 
 #[aoc(day4, part2)]
-pub fn solve_day4_part2(input: &inp) -> u64 {
+pub fn solve_day4_part2(input: &Inp) -> u64 {
     let mut nums: Vec<u64> = vec![];
     let mut won: Vec<bool> = vec![];
     for _ in &input.1 {
