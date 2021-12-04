@@ -93,16 +93,20 @@ pub fn solve_day3_part2(input: &Vec<Line>) -> u64 {
     }
     let mut a: u64 = 0;
     let mut b: u64 = 0;
-    for (i, x) in gamma.iter().rev().enumerate() {
-        if *x {
-            a += (2 as u64).pow(i as u32);
+    for x in gamma {
+        if x {
+            a |= 1;
         }
+        a <<= 1;
     }
-    for (i, x) in epsilon.iter().rev().enumerate() {
-        if *x {
-            b += (2 as u64).pow(i as u32);
+    a >>= 1;
+    for x in epsilon {
+        if x {
+            b |= 1;
         }
+        b <<= 1;
     }
+    b >>= 1;
     a * b
 }
 
