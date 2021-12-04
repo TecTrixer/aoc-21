@@ -29,7 +29,7 @@ pub fn generator_day4(input: &str) -> Inp {
 
 #[aoc(day4, part1)]
 pub fn solve_day4_part1(input: &Inp) -> u64 {
-    let mut nums: HashSet<u64> = HashSet::new();
+    let mut nums: HashSet<u64> = HashSet::with_capacity(input.0.len());
     for num in &input.0 {
         nums.insert(*num);
         for player in &input.1 {
@@ -83,8 +83,8 @@ fn check(nums: &HashSet<u64>, bingo_sheet: &Vec<Vec<u64>>) -> bool {
 
 #[aoc(day4, part2)]
 pub fn solve_day4_part2(input: &Inp) -> u64 {
-    let mut nums: HashSet<u64> = HashSet::new();
-    let mut won: HashSet<u64> = HashSet::new();
+    let mut nums: HashSet<u64> = HashSet::with_capacity(input.0.len());
+    let mut won: HashSet<u64> = HashSet::with_capacity(input.1.len());
     let player_size: usize = input.1.len();
     for num in &input.0 {
         nums.insert(*num);
