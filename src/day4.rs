@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 type Line = Vec<Vec<u64>>;
 type Inp = (Vec<u64>, Vec<Line>);
 #[aoc_generator(day4)]
@@ -28,19 +29,19 @@ pub fn generator_day4(input: &str) -> Inp {
 
 #[aoc(day4, part1)]
 pub fn solve_day4_part1(input: &Inp) -> u64 {
-    let mut nums: Vec<u64> = vec![];
+    let mut nums: HashSet<u64> = HashSet::new();
     for num in &input.0 {
-        nums.push(*num);
+        nums.insert(*num);
         for player in &input.1 {
             if check(&nums, &player) {
-                return sum(&nums, &player) * nums[nums.len() - 1];
+                return sum(&nums, &player) * num;
             }
         }
     }
     return 0;
 }
 
-fn sum(nums: &Vec<u64>, player: &Vec<Vec<u64>>) -> u64 {
+fn sum(nums: &HashSet<u64>, player: &Vec<Vec<u64>>) -> u64 {
     let mut res: u64 = 0;
     for x in 0..player.len() {
         for y in 0..player[0].len() {
@@ -52,7 +53,7 @@ fn sum(nums: &Vec<u64>, player: &Vec<Vec<u64>>) -> u64 {
     res
 }
 
-fn check(nums: &Vec<u64>, bingo_sheet: &Vec<Vec<u64>>) -> bool {
+fn check(nums: &HashSet<u64>, bingo_sheet: &Vec<Vec<u64>>) -> bool {
     for x in 0..bingo_sheet.len() {
         let mut worked: bool = true;
         for y in 0..bingo_sheet[0].len() {
@@ -82,19 +83,16 @@ fn check(nums: &Vec<u64>, bingo_sheet: &Vec<Vec<u64>>) -> bool {
 
 #[aoc(day4, part2)]
 pub fn solve_day4_part2(input: &Inp) -> u64 {
-    let mut nums: Vec<u64> = vec![];
-    let mut won: Vec<bool> = vec![];
-    for _ in &input.1 {
-        won.push(false);
-    }
-
+    let mut nums: HashSet<u64> = HashSet::new();
+    let mut won: HashSet<u64> = HashSet::new();
+    let player_size: usize = input.1.len();
     for num in &input.0 {
-        nums.push(*num);
+        nums.insert(*num);
         for (i, player) in (&input.1).iter().enumerate() {
-            if !won[i] && check(&nums, &player) {
-                won[i] = true;
-                if !won.contains(&false) {
-                    return sum(&nums, &player) * nums[nums.len() - 1];
+            if !won.contains(&(i as u64)) && check(&nums, &player) {
+                won.insert(i as u64);
+                if won.len() >= player_size {
+                    return sum(&nums, &player) * num;
                 }
             }
         }
