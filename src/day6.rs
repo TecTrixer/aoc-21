@@ -8,7 +8,7 @@ type Inp = [u64; 9];
 pub fn generator_day6(input: &str) -> Inp {
     let mut res: [u64; 9] = [0; 9];
     for line in input.lines() {
-        for num in input.trim().split(',') {
+        for num in line.trim().split(',') {
             res[num.parse::<usize>().unwrap()] += 1;
         }
     }
@@ -17,18 +17,18 @@ pub fn generator_day6(input: &str) -> Inp {
 
 #[aoc(day6, part1)]
 pub fn solve_day6_part1(input: &Inp) -> u64 {
-    let mut oldArr: [u64; 9] = *input;
+    let mut old_arr: [u64; 9] = *input;
     for _ in 0..80 {
-        let mut newArr: [u64; 9] = [0; 9];
-        newArr[6] = oldArr[0];
-        newArr[8] = oldArr[0];
+        let mut new_arr: [u64; 9] = [0; 9];
+        new_arr[6] = old_arr[0];
+        new_arr[8] = old_arr[0];
         for i in 1..9 {
-            newArr[i - 1] += oldArr[i];
+            new_arr[i - 1] += old_arr[i];
         }
-        oldArr = newArr;
+        old_arr = new_arr;
     }
     let mut count: u64 = 0;
-    for i in oldArr {
+    for i in old_arr {
         count += i;
     }
     count
@@ -36,18 +36,18 @@ pub fn solve_day6_part1(input: &Inp) -> u64 {
 
 #[aoc(day6, part2)]
 pub fn solve_day6_part2(input: &Inp) -> u64 {
-    let mut oldArr: [u64; 9] = *input;
+    let mut old_arr: [u64; 9] = *input;
     for _ in 0..256 {
-        let mut newArr: [u64; 9] = [0; 9];
-        newArr[6] = oldArr[0];
-        newArr[8] = oldArr[0];
+        let mut new_arr: [u64; 9] = [0; 9];
+        new_arr[6] = old_arr[0];
+        new_arr[8] = old_arr[0];
         for i in 1..9 {
-            newArr[i - 1] += oldArr[i];
+            new_arr[i - 1] += old_arr[i];
         }
-        oldArr = newArr;
+        old_arr = new_arr;
     }
     let mut count: u64 = 0;
-    for i in oldArr {
+    for i in old_arr {
         count += i;
     }
     count
