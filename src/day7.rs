@@ -54,7 +54,7 @@ pub fn solve_day7_part2(input: &Inp) -> u64 {
         let mut counter: u64 = 0;
         for num in nums {
             let dist: u64 = (*num as i64 - i as i64).abs() as u64;
-            counter += dist * (dist + 1) / 2 + 1;
+            counter += dist * (dist + 1) / 2;
         }
         if counter < best_num {
             best_num = counter;
