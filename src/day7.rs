@@ -29,7 +29,6 @@ pub fn solve_day7_part1(input: &Inp) -> u64 {
     let min: u64 = input.0;
     let max: u64 = input.1;
     let nums: &Vec<u64> = &input.2;
-    let mut best_x = min;
     let mut best_num = u64::MAX;
     for i in min..=max {
         let mut counter: u64 = 0;
@@ -38,7 +37,8 @@ pub fn solve_day7_part1(input: &Inp) -> u64 {
         }
         if counter < best_num {
             best_num = counter;
-            best_x = i;
+        } else {
+            break;
         }
     }
     best_num
@@ -49,7 +49,6 @@ pub fn solve_day7_part2(input: &Inp) -> u64 {
     let min: u64 = input.0;
     let max: u64 = input.1;
     let nums: &Vec<u64> = &input.2;
-    let mut best_x = min;
     let mut best_num = u64::MAX;
     for i in min..=max {
         let mut counter: u64 = 0;
@@ -59,7 +58,8 @@ pub fn solve_day7_part2(input: &Inp) -> u64 {
         }
         if counter < best_num {
             best_num = counter;
-            best_x = i;
+        } else {
+            break;
         }
     }
     best_num
