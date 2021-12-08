@@ -65,7 +65,6 @@ pub fn solve_day8_part2(input: &Inp) -> u64 {
         let mut four: String = "".to_string();
         let mut eight: String = "".to_string();
         let mut two: String = "".to_string();
-        let mut zero: String = "".to_string();
         let mut three: String = "".to_string();
         let mut five: String = "".to_string();
         let mut six: String = "".to_string();
@@ -93,9 +92,7 @@ pub fn solve_day8_part2(input: &Inp) -> u64 {
                 nine = elem;
             } else if elem.len() == 5 && contains(&elem, &one) {
                 three = elem;
-            } else if elem.len() == 6 && contains(&elem, &one) {
-                zero = elem;
-            } else if elem.len() == 6 {
+            } else if elem.len() == 6 && !contains(&elem, &one) {
                 six = elem;
             } else if contains(&elem, &fivecheck) {
                 five = elem;
