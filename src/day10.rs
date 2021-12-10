@@ -45,63 +45,51 @@ pub fn generator_day10(input: &str) -> Inp {
 pub fn solve_day10_part1(input: &Inp) -> u64 {
     let mut count: u64 = 0;
     for line in input {
-        let mut c_square: u64 = 0;
-        let mut c_arrow: u64 = 0;
-        let mut c_bracket: u64 = 0;
-        let mut c_curly: u64 = 0;
         let mut stack: Vec<Sign> = vec![];
         for sign in line {
             match sign {
                 Sign::LeftSquare => {
-                    c_square += 1;
                     stack.push(Sign::LeftSquare);
                 }
                 Sign::RightSquare => {
-                    if c_square == 0 || stack[stack.len() - 1] != Sign::LeftSquare {
+                    if stack[stack.len() - 1] != Sign::LeftSquare {
                         count += 57;
                         break;
                     } else {
                         stack.pop();
-                        c_square -= 1;
                     }
                 }
                 Sign::LeftArrow => {
-                    c_arrow += 1;
                     stack.push(Sign::LeftArrow);
                 }
                 Sign::RightArrow => {
-                    if c_arrow == 0 || stack[stack.len() - 1] != Sign::LeftArrow {
+                    if stack[stack.len() - 1] != Sign::LeftArrow {
                         count += 25137;
                         break;
                     } else {
                         stack.pop();
-                        c_arrow -= 1;
                     }
                 }
                 Sign::LeftCurly => {
-                    c_curly += 1;
                     stack.push(Sign::LeftCurly);
                 }
                 Sign::RightCurly => {
-                    if c_curly == 0 || stack[stack.len() - 1] != Sign::LeftCurly {
+                    if stack[stack.len() - 1] != Sign::LeftCurly {
                         count += 1197;
                         break;
                     } else {
                         stack.pop();
-                        c_curly -= 1;
                     }
                 }
                 Sign::LeftBracket => {
-                    c_bracket += 1;
                     stack.push(Sign::LeftBracket);
                 }
                 Sign::RightBracket => {
-                    if c_bracket == 0 || stack[stack.len() - 1] != Sign::LeftBracket {
+                    if stack[stack.len() - 1] != Sign::LeftBracket {
                         count += 3;
                         break;
                     } else {
                         stack.pop();
-                        c_bracket -= 1;
                     }
                 }
             }
@@ -115,63 +103,51 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
     let mut res: Vec<u64> = vec![];
     for line in input {
         let mut count: u64 = 0;
-        let mut c_square: u64 = 0;
-        let mut c_arrow: u64 = 0;
-        let mut c_bracket: u64 = 0;
-        let mut c_curly: u64 = 0;
         let mut stack: Vec<Sign> = vec![];
         for sign in line {
             match sign {
                 Sign::LeftSquare => {
-                    c_square += 1;
                     stack.push(Sign::LeftSquare);
                 }
                 Sign::RightSquare => {
-                    if c_square == 0 || stack[stack.len() - 1] != Sign::LeftSquare {
+                    if stack[stack.len() - 1] != Sign::LeftSquare {
                         stack.retain(|_| false);
                         break;
                     } else {
                         stack.pop();
-                        c_square -= 1;
                     }
                 }
                 Sign::LeftArrow => {
-                    c_arrow += 1;
                     stack.push(Sign::LeftArrow);
                 }
                 Sign::RightArrow => {
-                    if c_arrow == 0 || stack[stack.len() - 1] != Sign::LeftArrow {
+                    if stack[stack.len() - 1] != Sign::LeftArrow {
                         stack.retain(|_| false);
                         break;
                     } else {
                         stack.pop();
-                        c_arrow -= 1;
                     }
                 }
                 Sign::LeftCurly => {
-                    c_curly += 1;
                     stack.push(Sign::LeftCurly);
                 }
                 Sign::RightCurly => {
-                    if c_curly == 0 || stack[stack.len() - 1] != Sign::LeftCurly {
+                    if stack[stack.len() - 1] != Sign::LeftCurly {
                         stack.retain(|_| false);
                         break;
                     } else {
                         stack.pop();
-                        c_curly -= 1;
                     }
                 }
                 Sign::LeftBracket => {
-                    c_bracket += 1;
                     stack.push(Sign::LeftBracket);
                 }
                 Sign::RightBracket => {
-                    if c_bracket == 0 || stack[stack.len() - 1] != Sign::LeftBracket {
+                    if stack[stack.len() - 1] != Sign::LeftBracket {
                         stack.retain(|_| false);
                         break;
                     } else {
                         stack.pop();
-                        c_bracket -= 1;
                     }
                 }
             }
