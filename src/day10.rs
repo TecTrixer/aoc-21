@@ -111,7 +111,7 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
                 }
                 Sign::RightSquare => {
                     if stack[stack.len() - 1] != Sign::LeftSquare {
-                        stack.retain(|_| false);
+                        stack.clear();
                         break;
                     } else {
                         stack.pop();
@@ -122,7 +122,7 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
                 }
                 Sign::RightArrow => {
                     if stack[stack.len() - 1] != Sign::LeftArrow {
-                        stack.retain(|_| false);
+                        stack.clear();
                         break;
                     } else {
                         stack.pop();
@@ -133,7 +133,7 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
                 }
                 Sign::RightCurly => {
                     if stack[stack.len() - 1] != Sign::LeftCurly {
-                        stack.retain(|_| false);
+                        stack.clear();
                         break;
                     } else {
                         stack.pop();
@@ -144,7 +144,7 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
                 }
                 Sign::RightBracket => {
                     if stack[stack.len() - 1] != Sign::LeftBracket {
-                        stack.retain(|_| false);
+                        stack.clear();
                         break;
                     } else {
                         stack.pop();
@@ -175,6 +175,7 @@ pub fn solve_day10_part2(input: &Inp) -> u64 {
         }
         if count != 0 {
             res.push(count);
+            stack.clear();
         }
     }
     res.sort();
