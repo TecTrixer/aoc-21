@@ -31,7 +31,6 @@ pub fn solve_day11_part1(inp: &Inp) -> u64 {
         }
 
         // for all bigger than 9s flash around them
-
         for y in 0..input.len() {
             for x in 0..input[0].len() {
                 if input[y][x].0 > 9 {
@@ -39,6 +38,8 @@ pub fn solve_day11_part1(inp: &Inp) -> u64 {
                 }
             }
         }
+
+        // count bigger than 9s and reset them to 0s
         for y in 0..input.len() {
             for x in 0..input[0].len() {
                 input[y][x].1 = false;
@@ -50,13 +51,13 @@ pub fn solve_day11_part1(inp: &Inp) -> u64 {
         }
     }
     count
-
-    // count bigger than 9s and reset them to 0s
 }
 
 fn rec_flash(input: &mut Vec<Vec<(u64, bool)>>, x: usize, y: usize) {
     if input[y][x].0 > 9 && input[y][x].1 == false {
         input[y][x].1 = true;
+
+        // iterate over every neighbor
         for y_diff in 0..=2 {
             for x_diff in 0..=2 {
                 if x + x_diff - 1 < input[0].len()
@@ -65,6 +66,7 @@ fn rec_flash(input: &mut Vec<Vec<(u64, bool)>>, x: usize, y: usize) {
                     && y + y_diff >= 1
                     && !input[y + y_diff - 1][x + x_diff - 1].1
                 {
+                    // if the neighbor has not been visited do so
                     input[y + y_diff - 1][x + x_diff - 1].0 += 1;
                     rec_flash(input, x + x_diff - 1, y + y_diff - 1);
                 }
@@ -79,6 +81,7 @@ pub fn solve_day11_part2(inp: &Inp) -> u64 {
     let mut step: u64 = 0;
     loop {
         step += 1;
+
         // increase everything by 1
         for y in 0..input.len() {
             for x in 0..input[0].len() {
@@ -87,7 +90,6 @@ pub fn solve_day11_part2(inp: &Inp) -> u64 {
         }
 
         // for all bigger than 9s flash around them
-
         for y in 0..input.len() {
             for x in 0..input[0].len() {
                 if input[y][x].0 > 9 {
@@ -95,6 +97,8 @@ pub fn solve_day11_part2(inp: &Inp) -> u64 {
                 }
             }
         }
+
+        // check if all flashed otherwise reset all flashed ones
         let mut all_flashed: bool = true;
         for y in 0..input.len() {
             for x in 0..input[0].len() {
