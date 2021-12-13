@@ -132,7 +132,7 @@ pub fn solve_day13_part2(input: &Inp) -> u64 {
             if points.contains(&(x, y)) {
                 print!("#");
             } else {
-                print!(".");
+                print!(" ");
             }
         }
         println!();
