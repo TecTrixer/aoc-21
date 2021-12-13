@@ -1,18 +1,19 @@
 // execute vim command
 // :%s/13/{Number of Day}/g
 // to set correct day
+use std::collections::HashSet;
 
 pub enum Fold {
     X(u64),
     Y(u64),
 }
 
-type Line = Vec<(u64, u64)>;
+type Line = HashSet<(u64, u64)>;
 type Inp = (Line, Vec<Fold>);
 
 #[aoc_generator(day13)]
 pub fn generator_day13(input: &str) -> Inp {
-    let mut res: Vec<(u64, u64)> = vec![];
+    let mut res: HashSet<(u64, u64)> = HashSet::with_capacity(100);
     let mut folds: Vec<Fold> = vec![];
     let mut first_part = true;
     for line in input.lines() {
@@ -22,7 +23,7 @@ pub fn generator_day13(input: &str) -> Inp {
         }
         if first_part {
             let mut iter = line.split(',');
-            res.push((
+            res.insert((
                 iter.next().unwrap().parse().unwrap(),
                 iter.next().unwrap().parse().unwrap(),
             ));
@@ -43,8 +44,8 @@ pub fn generator_day13(input: &str) -> Inp {
 
 #[aoc(day13, part1)]
 pub fn solve_day13_part1(input: &Inp) -> u64 {
-    let points: Vec<(u64, u64)> = input.0.clone();
-    let mut new_points: Vec<(u64, u64)> = vec![];
+    let points: HashSet<(u64, u64)> = input.0.clone();
+    let mut new_points: HashSet<(u64, u64)> = HashSet::with_capacity(points.len());
 
     // fold
     match input.1[0] {
@@ -53,10 +54,10 @@ pub fn solve_day13_part1(input: &Inp) -> u64 {
                 if *x > col {
                     let new_x: u64 = col - (x - col);
                     if !points.contains(&(new_x, *y)) {
-                        new_points.push((new_x, *y));
+                        new_points.insert((new_x, *y));
                     }
                 } else {
-                    new_points.push((*x, *y));
+                    new_points.insert((*x, *y));
                 }
             }
         }
@@ -65,10 +66,10 @@ pub fn solve_day13_part1(input: &Inp) -> u64 {
                 if *y > row {
                     let new_y: u64 = row - (y - row);
                     if !points.contains(&(*x, new_y)) {
-                        new_points.push((*x, new_y));
+                        new_points.insert((*x, new_y));
                     }
                 } else {
-                    new_points.push((*x, *y));
+                    new_points.insert((*x, *y));
                 }
             }
         }
@@ -78,8 +79,8 @@ pub fn solve_day13_part1(input: &Inp) -> u64 {
 
 #[aoc(day13, part2)]
 pub fn solve_day13_part2(input: &Inp) -> u64 {
-    let mut points: Vec<(u64, u64)> = input.0.clone();
-    let mut new_points: Vec<(u64, u64)> = vec![];
+    let mut points: HashSet<(u64, u64)> = input.0.clone();
+    let mut new_points: HashSet<(u64, u64)> = HashSet::with_capacity(points.len());
 
     // fold
     for fold in input.1.iter() {
@@ -89,10 +90,10 @@ pub fn solve_day13_part2(input: &Inp) -> u64 {
                     if *x > col {
                         let new_x: u64 = col - (x - col);
                         if !points.contains(&(new_x, *y)) {
-                            new_points.push((new_x, *y));
+                            new_points.insert((new_x, *y));
                         }
                     } else {
-                        new_points.push((*x, *y));
+                        new_points.insert((*x, *y));
                     }
                 }
             }
@@ -101,16 +102,16 @@ pub fn solve_day13_part2(input: &Inp) -> u64 {
                     if *y > row {
                         let new_y: u64 = row - (y - row);
                         if !points.contains(&(*x, new_y)) {
-                            new_points.push((*x, new_y));
+                            new_points.insert((*x, new_y));
                         }
                     } else {
-                        new_points.push((*x, *y));
+                        new_points.insert((*x, *y));
                     }
                 }
             }
         }
         points = new_points;
-        new_points = vec![];
+        new_points = HashSet::with_capacity(points.len());
     }
 
     // finding max
