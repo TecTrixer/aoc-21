@@ -34,26 +34,14 @@ pub fn solve_day14_part1(input: &Inp) -> u64 {
     let string = input.0.clone();
     let mut polymer: HashMap<[char; 2], u64> = HashMap::with_capacity(10);
     for i in 0..string.len() - 1 {
-        if let Some(x) = polymer.get(&[string[i], string[i + 1]]) {
-            polymer.insert([string[i], string[i + 1]], x + 1);
-        } else {
-            polymer.insert([string[i], string[i + 1]], 1);
-        }
+        *polymer.entry([string[i], string[i + 1]]).or_insert(0) += 1;
     }
     let mut new_polymer: HashMap<[char; 2], u64> = HashMap::with_capacity(10);
     for _ in 0..10 {
         for ([a, b], x) in polymer.iter() {
             if let Some(c) = input.1.get(&[*a, *b]) {
-                if let Some(num) = new_polymer.get(&[*a, *c]) {
-                    new_polymer.insert([*a, *c], *num + *x);
-                } else {
-                    new_polymer.insert([*a, *c], *x);
-                }
-                if let Some(num) = new_polymer.get(&[*c, *b]) {
-                    new_polymer.insert([*c, *b], *num + *x);
-                } else {
-                    new_polymer.insert([*c, *b], *x);
-                }
+                *new_polymer.entry([*a, *c]).or_insert(0) += *x;
+                *new_polymer.entry([*c, *b]).or_insert(0) += *x;
             }
         }
         polymer = new_polymer;
@@ -62,19 +50,11 @@ pub fn solve_day14_part1(input: &Inp) -> u64 {
 
     // count
     let mut count_db: HashMap<char, u64> = HashMap::with_capacity(10);
-    for ([a, b], x) in polymer.iter() {
-        if let Some(num) = count_db.get(a) {
-            count_db.insert(*a, *num + *x);
-        } else {
-            count_db.insert(*a, *x);
-        }
+    for ([a, _], x) in polymer.iter() {
+        *count_db.entry(*a).or_insert(0) += *x;
     }
     let a = string[string.len() - 1];
-    if let Some(num) = count_db.get(&a) {
-        count_db.insert(a, *num + 1);
-    } else {
-        count_db.insert(a, 1);
-    }
+    *count_db.entry(a).or_insert(0) += 1;
 
     let mut count_vec: Vec<u64> = count_db.into_values().collect();
     count_vec.sort();
@@ -86,26 +66,14 @@ pub fn solve_day14_part2(input: &Inp) -> u64 {
     let string = input.0.clone();
     let mut polymer: HashMap<[char; 2], u64> = HashMap::with_capacity(10);
     for i in 0..string.len() - 1 {
-        if let Some(x) = polymer.get(&[string[i], string[i + 1]]) {
-            polymer.insert([string[i], string[i + 1]], x + 1);
-        } else {
-            polymer.insert([string[i], string[i + 1]], 1);
-        }
+        *polymer.entry([string[i], string[i + 1]]).or_insert(0) += 1;
     }
     let mut new_polymer: HashMap<[char; 2], u64> = HashMap::with_capacity(10);
     for _ in 0..40 {
         for ([a, b], x) in polymer.iter() {
             if let Some(c) = input.1.get(&[*a, *b]) {
-                if let Some(num) = new_polymer.get(&[*a, *c]) {
-                    new_polymer.insert([*a, *c], *num + *x);
-                } else {
-                    new_polymer.insert([*a, *c], *x);
-                }
-                if let Some(num) = new_polymer.get(&[*c, *b]) {
-                    new_polymer.insert([*c, *b], *num + *x);
-                } else {
-                    new_polymer.insert([*c, *b], *x);
-                }
+                *new_polymer.entry([*a, *c]).or_insert(0) += *x;
+                *new_polymer.entry([*c, *b]).or_insert(0) += *x;
             }
         }
         polymer = new_polymer;
@@ -114,19 +82,11 @@ pub fn solve_day14_part2(input: &Inp) -> u64 {
 
     // count
     let mut count_db: HashMap<char, u64> = HashMap::with_capacity(10);
-    for ([a, b], x) in polymer.iter() {
-        if let Some(num) = count_db.get(a) {
-            count_db.insert(*a, *num + *x);
-        } else {
-            count_db.insert(*a, *x);
-        }
+    for ([a, _], x) in polymer.iter() {
+        *count_db.entry(*a).or_insert(0) += *x;
     }
     let a = string[string.len() - 1];
-    if let Some(num) = count_db.get(&a) {
-        count_db.insert(a, *num + 1);
-    } else {
-        count_db.insert(a, 1);
-    }
+    *count_db.entry(a).or_insert(0) += 1;
 
     let mut count_vec: Vec<u64> = count_db.into_values().collect();
     count_vec.sort();
