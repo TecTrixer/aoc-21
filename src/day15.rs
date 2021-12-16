@@ -1,5 +1,3 @@
-use priority_queue::PriorityQueue;
-use std::collections::HashSet;
 // execute vim command
 // :%s/15/{Number of Day}/g
 // to set correct day
@@ -46,7 +44,7 @@ pub fn solve_day15_part1(input: &Inp) -> u64 {
     dp[input.len() - 1][input[0].len() - 1] - input[0][0]
 }
 
-fn print(input: &Vec<Vec<u64>>) {
+fn _print(input: &Vec<Vec<u64>>) {
     for row in input {
         print!("[");
         for elem in row {
