@@ -22,46 +22,28 @@ pub fn generator_day15(input: &str) -> Inp {
 
 #[aoc(day15, part1)]
 pub fn solve_day15_part1(input: &Inp) -> u64 {
-    let mut q: HashSet<(u8, u8)> = HashSet::with_capacity(256);
-    let mut dist: Vec<Vec<u64>> = vec![];
+    let mut dp: Vec<Vec<u64>> = vec![];
     for row in 0..input.len() {
-        let mut new_row: Vec<u64> = vec![];
+        let mut temp: Vec<u64> = vec![];
         for col in 0..input[0].len() {
-            new_row.push(u64::MAX);
-            q.insert((row as u8, col as u8));
+            temp.push(input[row][col]);
         }
-        dist.push(new_row);
+        dp.push(temp);
     }
-    dist[0][0] = input[0][0];
-    while q.len() != 0 {
-        let mut u = (0, 0);
-        let mut dist_u = u64::MAX;
-        for row in 0..input.len() {
-            for col in 0..input.len() {
-                if q.contains(&(row as u8, col as u8)) && dist[row][col] <= dist_u {
-                    dist_u = input[row][col];
-                    u = (row, col);
-                }
-            }
-        }
-        if u.0 == input.len() - 1 && u.1 == input[0].len() - 1 {
-            break;
-        }
-        q.remove(&(u.0 as u8, u.1 as u8));
-        if q.contains(&((u.0 + 1) as u8, u.1 as u8)) {
-            let alt = dist[u.0][u.1] + input[u.0 + 1][u.1];
-            if alt < dist[u.0 + 1][u.1] {
-                dist[u.0 + 1][u.1] = alt;
-            }
-        }
-        if q.contains(&(u.0 as u8, (u.1 + 1) as u8)) {
-            let alt = dist[u.0][u.1] + input[u.0][u.1 + 1];
-            if alt < dist[u.0][u.1 + 1] {
-                dist[u.0][u.1 + 1] = alt;
+    for i in 0..dp.len() {
+        for j in 0..dp[0].len() {
+            if i == 0 && j == 0 {
+                continue;
+            } else if i == 0 {
+                dp[i][j] += dp[i][j - 1];
+            } else if j == 0 {
+                dp[i][j] += dp[i - 1][j];
+            } else {
+                dp[i][j] += min(dp[i - 1][j], dp[i][j - 1]);
             }
         }
     }
-    dist[input.len() - 1][input[0].len() - 1] - input[input.len() - 1][input[0].len() - 1]
+    dp[input.len() - 1][input[0].len() - 1] - input[0][0]
 }
 
 fn print(input: &Vec<Vec<u64>>) {
@@ -76,44 +58,40 @@ fn print(input: &Vec<Vec<u64>>) {
 
 #[aoc(day15, part2)]
 pub fn solve_day15_part2(input: &Inp) -> u64 {
-    let mut q: PriorityQueue<(u8, u8), i64> = PriorityQueue::new();
-    let mut done: HashSet<(u8, u8)> = HashSet::with_capacity(256);
-    let mut dist: Vec<Vec<u64>> = vec![];
-    for row in 0..input.len() {
-        let mut new_row: Vec<u64> = vec![];
-        for col in 0..input[0].len() {
-            new_row.push(u64::MAX);
-            q.push((row as u8, col as u8), i64::MIN);
+    let mut dp: Vec<Vec<u64>> = vec![];
+    for row in 0..input.len() * 5 {
+        let mut temp: Vec<u64> = vec![];
+        for col in 0..input[0].len() * 5 {
+            let x = col / input[0].len();
+            let y = row / input.len();
+            let mut val = (input[row % input.len()][col % input.len()] + x as u64 + y as u64) % 9;
+            if val == 0 {
+                val = 9;
+            }
+            temp.push(val);
         }
-        dist.push(new_row);
+        dp.push(temp);
     }
-    dist[0][0] = input[0][0];
-    q.push_decrease((0, 0), -(input[0][0] as i64));
-    while !q.is_empty() {
-        println!("{:?}", q);
-        println!("---------------------------------------------");
-        let u = q.pop().unwrap();
-        done.insert(u.0);
+    for i in 0..dp.len() {
+        for j in 0..dp[0].len() {
+            if i == 0 && j == 0 {
+                continue;
+            } else if i == 0 {
+                dp[i][j] += dp[i][j - 1];
+            } else if j == 0 {
+                dp[i][j] += dp[i - 1][j];
+            } else {
+                dp[i][j] += min(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    dp[dp.len() - 1][dp[0].len() - 1] - input[0][0]
+}
 
-        if u.0 .0 as usize == input.len() - 1 && u.0 .1 as usize == input[0].len() - 1 {
-            ()
-        }
-        if done.contains(&((u.0 .0 + 1) as u8, u.0 .1 as u8)) {
-            let alt = dist[u.0 .0 as usize][u.0 .1 as usize]
-                + input[u.0 .0 as usize + 1][u.0 .1 as usize];
-            if alt < dist[u.0 .0 as usize + 1][u.0 .1 as usize] {
-                dist[u.0 .0 as usize + 1][u.0 .1 as usize] = alt;
-                q.change_priority(&(u.0 .0 + 1, u.0 .1), -(alt as i64));
-            }
-        }
-        if done.contains(&(u.0 .0 as u8, (u.0 .1 + 1) as u8)) {
-            let alt = dist[u.0 .0 as usize][u.0 .1 as usize]
-                + input[u.0 .0 as usize][u.0 .1 as usize + 1];
-            if alt < dist[u.0 .0 as usize][u.0 .1 as usize + 1] {
-                dist[u.0 .0 as usize][u.0 .1 as usize + 1] = alt;
-                q.change_priority(&(u.0 .0, u.0 .1 + 1), -(alt as i64));
-            }
-        }
+fn min(a: u64, b: u64) -> u64 {
+    if a < b {
+        return a;
+    } else {
+        return b;
     }
-    dist[input.len() - 1][input[0].len() - 1] - input[input.len() - 1][input[0].len() - 1]
 }

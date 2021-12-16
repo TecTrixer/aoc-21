@@ -49,9 +49,9 @@ pub fn solve_day5_part1(input: &Vec<Line>) -> u64 {
     }
 
     // generate array
-    let mut field: Vec<Vec<u64>> = vec![];
+    let mut field: Vec<Vec<u8>> = vec![];
     for _ in 0..max_y + 1 {
-        let mut row: Vec<u64> = vec![];
+        let mut row: Vec<u8> = vec![];
         for _ in 0..max_x + 1 {
             row.push(0);
         }
@@ -108,9 +108,9 @@ pub fn solve_day5_part2(input: &Vec<Line>) -> u64 {
     }
 
     // generate array
-    let mut field: Vec<Vec<u64>> = vec![];
+    let mut field: Vec<Vec<u8>> = vec![];
     for _ in 0..max_y + 1 {
-        let mut row: Vec<u64> = vec![];
+        let mut row: Vec<u8> = vec![];
         for _ in 0..max_x + 1 {
             row.push(0);
         }
