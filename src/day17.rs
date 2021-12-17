@@ -11,7 +11,28 @@ pub struct Line {
 type Inp = Line;
 
 #[aoc_generator(day17)]
-pub fn generator_day17(_input: &str) -> Inp {
+pub fn generator_day17(input: &str) -> Inp {
+    for line in input.lines() {
+        let mut space_iter = line.trim().split(" ");
+        space_iter.next().unwrap();
+        space_iter.next().unwrap();
+        let mut x_iter = space_iter
+            .next()
+            .unwrap()
+            .trim_start_matches("x=")
+            .trim_end_matches(",")
+            .split("..");
+        let mut y_iter = space_iter
+            .next()
+            .unwrap()
+            .trim_start_matches("y=")
+            .split("..");
+        let x1: i64 = x_iter.next().unwrap().parse().unwrap();
+        let x2: i64 = x_iter.next().unwrap().parse().unwrap();
+        let y2: i64 = y_iter.next().unwrap().parse().unwrap();
+        let y1: i64 = y_iter.next().unwrap().parse().unwrap();
+        return Line { x1, x2, y1, y2 };
+    }
     Line {
         x1: 235,
         x2: 259,
@@ -22,8 +43,8 @@ pub fn generator_day17(_input: &str) -> Inp {
 
 #[aoc(day17, part1)]
 pub fn solve_day17_part1(input: &Inp) -> u64 {
-    let y2 = input.y2;
-    let res = -1 * y2 * (-1 * y2 - 1) / 2;
+    let y2 = input.y2 * -1;
+    let res = y2 * (y2 - 1) / 2;
     res as u64
 }
 
