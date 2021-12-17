@@ -81,49 +81,46 @@ pub fn solve_day17_part2(input: &Inp) -> u64 {
             {
                 break;
             }
-            if stopping {
-                let mut y: i64 = 0;
-                let mut y_vel = y_start_vel;
-                let mut i = 0;
-                if y_start_vel > 0 {
-                    y_vel = -1 * (y_start_vel + 1);
-                    i = 2 * y_start_vel;
-                }
-                while y + 1 > input.y2 {
-                    if y < input.y1 + 1 {
-                        if x_start_vel * (x_start_vel + 1) / 2
-                            - (x_start_vel - i) * (x_start_vel - i + 1) / 2
-                            >= input.x1
-                        {
-                            count += 1;
-                        } else {
-                            println!("x: {}, i: {}, y: {}", x_start_vel, i, y_start_vel);
-                        }
-                        break;
-                    }
-                    y += y_vel;
-                    y_vel -= 1;
-                    i += 1;
-                }
+            // find x_step_lower and x_step_upper
+            let x_step_lower = compute_lower_bound(x_start_vel as f64, input.x1 as f64);
+            let x_step_upper = compute_upper_bound(x_start_vel as f64, input.x2 as f64);
+
+            let y_step_lower =
+                -1 * compute_upper_bound(-1f64 * y_start_vel as f64, input.y1 as f64);
+            let y_step_upper =
+                -1 * compute_lower_bound(-1f64 * y_start_vel as f64, input.y2 as f64);
+
+            if y_step_lower > y_step_upper {
                 continue;
             }
-            let mut x: i64 = 0;
-            let mut y: i64 = 0;
-            let mut y_vel: i64 = y_start_vel;
-            let mut x_vel: i64 = x_start_vel;
-            while x < input.x2 + 1 && y + 1 > input.y2 {
-                if x + 1 > input.x1 && y < input.y1 + 1 {
-                    count += 1;
-                    break;
-                }
-                x += x_vel;
-                y += y_vel;
-                if x_vel > 0 {
-                    x_vel -= 1;
-                }
-                y_vel -= 1;
+
+            //println!(
+            //    "x_vel: {}, y_vel: {}  ||   x_lower: {}, y_lower: {}   ||   x_upper: {}, y_upper: {}",
+            //    x_start_vel, y_start_vel, x_step_lower, y_step_lower, x_step_upper, y_step_upper
+            //);
+
+            if y_step_lower <= x_step_lower && y_step_upper >= x_step_lower {
+                count += 1;
+                //println!("used x: {}, y: {}", x_start_vel, y_start_vel);
+            } else if x_step_lower <= y_step_lower && x_step_upper >= y_step_lower {
+                count += 1;
+                //println!("used x: {}; y: {}", x_start_vel, y_start_vel);
+            } else if x_step_upper == 0 && y_step_upper >= x_step_lower {
+                count += 1;
+                //println!("used x: {}; y: {}", x_start_vel, y_start_vel);
             }
         }
     }
     count
+}
+
+fn compute_lower_bound(vel: f64, goal: f64) -> i64 {
+    ((2f64 * vel + 1f64) / 2f64
+        - ((2f64 * vel + 1f64) * (2f64 * vel + 1f64) / 4f64 - 2f64 * goal).sqrt())
+    .ceil() as i64
+}
+fn compute_upper_bound(vel: f64, goal: f64) -> i64 {
+    ((2f64 * vel + 1f64) / 2f64
+        - ((2f64 * vel + 1f64) * (2f64 * vel + 1f64) / 4f64 - 2f64 * goal).sqrt())
+    .floor() as i64
 }
