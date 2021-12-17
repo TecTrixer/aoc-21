@@ -33,76 +33,55 @@ pub fn generator_day12(input: &str) -> Inp {
 pub fn solve_day12_part1(input: &Inp) -> u64 {
     let mut count: u64 = 0;
     dfs(
-        "start".to_string(),
+        &"start".to_string(),
         input,
-        &HashSet::with_capacity(10),
+        &mut HashSet::with_capacity(10),
         &mut count,
+        true,
     );
     count
 }
 
-fn dfs(current: String, list_of_nodes: &Inp, visited_old: &HashSet<String>, count: &mut u64) {
-    let mut visited = visited_old.clone();
-    visited.insert(current.clone());
-    if &current == "end" {
-        *count += 1;
-        visited.remove("end");
-        return;
-    }
-    for next in list_of_nodes.get(&current).unwrap() {
-        if next == "start" {
-            continue;
-        }
-        if &next.to_lowercase() == next {
-            if visited.contains(next) {
-                continue;
-            }
-        }
-        dfs(next.clone(), list_of_nodes, &visited, count);
-    }
-    visited.remove(&current);
-}
-
-#[aoc(day12, part2)]
-pub fn solve_day12_part2(input: &Inp) -> u64 {
-    let mut count: u64 = 0;
-    dfs2(
-        "start".to_string(),
-        input,
-        &HashSet::with_capacity(10),
-        &mut count,
-        false,
-    );
-    count
-}
-
-fn dfs2(
-    current: String,
+fn dfs(
+    current: &String,
     list_of_nodes: &Inp,
-    visited_old: &HashSet<String>,
+    visited_old: &mut HashSet<String>,
     count: &mut u64,
     twice: bool,
 ) {
-    let mut visited = visited_old.clone();
+    let visited = visited_old;
     visited.insert(current.clone());
-    if &current == "end" {
+    if current == "end" {
         *count += 1;
         visited.remove("end");
         return;
     }
-    for next in list_of_nodes.get(&current).unwrap() {
+    for next in list_of_nodes.get(current).unwrap() {
         if next == "start" {
             continue;
         }
         if &next.to_lowercase() == next {
             if visited.contains(next) {
                 if !twice {
-                    dfs2(next.clone(), list_of_nodes, &visited, count, true);
+                    dfs(next, list_of_nodes, visited, count, true);
                 }
                 continue;
             }
         }
-        dfs2(next.clone(), list_of_nodes, &visited, count, twice);
+        dfs(next, list_of_nodes, visited, count, twice);
     }
-    visited.remove(&current);
+    visited.remove(current);
+}
+
+#[aoc(day12, part2)]
+pub fn solve_day12_part2(input: &Inp) -> u64 {
+    let mut count: u64 = 0;
+    dfs(
+        &"start".to_string(),
+        input,
+        &mut HashSet::with_capacity(10),
+        &mut count,
+        false,
+    );
+    count
 }
