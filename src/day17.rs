@@ -51,8 +51,62 @@ pub fn solve_day17_part1(input: &Inp) -> u64 {
 #[aoc(day17, part2)]
 pub fn solve_day17_part2(input: &Inp) -> u64 {
     let mut count: u64 = 0;
+    let mut x_pos: Vec<(i64, bool)> = vec![];
     for x_start_vel in 1..input.x2 + 1 {
-        for y_start_vel in input.y2..solve_day17_part1(input) as i64 {
+        if x_start_vel * (x_start_vel + 1) / 2 < input.x1 {
+            continue;
+        }
+        let mut x: i64 = x_start_vel;
+        let mut x_vel: i64 = x_start_vel - 1;
+        while x < input.x2 + 1 {
+            if x + 1 > input.x1 {
+                if x_vel * (x_vel + 1) / 2 + x <= input.x2 {
+                    x_pos.push((x_start_vel, true));
+                } else {
+                    x_pos.push((x_start_vel, false));
+                }
+                break;
+            } else if x == 0 {
+                break;
+            }
+            x += x_vel;
+            x_vel -= 1;
+        }
+    }
+    let upper_y = solve_day17_part1(input) as i64;
+    for (x_start_vel, stopping) in x_pos {
+        for y_start_vel in input.y2..upper_y {
+            if (y_start_vel > 0 && x_start_vel >= input.x1)
+                || (!stopping && y_start_vel + 1 > (input.x2 / x_start_vel + 1) / 2)
+            {
+                break;
+            }
+            if stopping {
+                let mut y: i64 = 0;
+                let mut y_vel = y_start_vel;
+                let mut i = 0;
+                if y_start_vel > 0 {
+                    y_vel = -1 * (y_start_vel + 1);
+                    i = 2 * y_start_vel;
+                }
+                while y + 1 > input.y2 {
+                    if y < input.y1 + 1 {
+                        if x_start_vel * (x_start_vel + 1) / 2
+                            - (x_start_vel - i) * (x_start_vel - i + 1) / 2
+                            >= input.x1
+                        {
+                            count += 1;
+                        } else {
+                            println!("x: {}, i: {}, y: {}", x_start_vel, i, y_start_vel);
+                        }
+                        break;
+                    }
+                    y += y_vel;
+                    y_vel -= 1;
+                    i += 1;
+                }
+                continue;
+            }
             let mut x: i64 = 0;
             let mut y: i64 = 0;
             let mut y_vel: i64 = y_start_vel;
