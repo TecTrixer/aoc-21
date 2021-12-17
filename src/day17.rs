@@ -51,39 +51,28 @@ pub fn solve_day17_part1(input: &Inp) -> u64 {
 #[aoc(day17, part2)]
 pub fn solve_day17_part2(input: &Inp) -> u64 {
     let mut count: u64 = 0;
-    let mut x_pos: Vec<(i64, bool)> = vec![];
+    let mut x_pos: Vec<(i64, i64, i64)> = vec![];
     for x_start_vel in 1..input.x2 + 1 {
-        if x_start_vel * (x_start_vel + 1) / 2 < input.x1 {
-            continue;
-        }
-        let mut x: i64 = x_start_vel;
-        let mut x_vel: i64 = x_start_vel - 1;
-        while x < input.x2 + 1 {
-            if x + 1 > input.x1 {
-                if x_vel * (x_vel + 1) / 2 + x <= input.x2 {
-                    x_pos.push((x_start_vel, true));
-                } else {
-                    x_pos.push((x_start_vel, false));
-                }
-                break;
-            } else if x == 0 {
-                break;
-            }
-            x += x_vel;
-            x_vel -= 1;
+        let x_step_lower = compute_lower_bound(x_start_vel as f64, input.x1 as f64);
+        let x_step_upper = compute_upper_bound(x_start_vel as f64, input.x2 as f64);
+        //println!(
+        //    "x_val: {}, lower: {}, upper: {}",
+        //    x_start_vel, x_step_lower, x_step_upper
+        //);
+        if x_step_lower != 0 && (x_step_lower <= x_step_upper || x_step_upper == 0) {
+            x_pos.push((x_start_vel, x_step_lower, x_step_upper));
         }
     }
+    //println!("{:?}", x_pos);
     let upper_y = solve_day17_part1(input) as i64;
-    for (x_start_vel, stopping) in x_pos {
+    for (x_start_vel, x_step_lower, x_step_upper) in x_pos {
         for y_start_vel in input.y2..upper_y {
             if (y_start_vel > 0 && x_start_vel >= input.x1)
-                || (!stopping && y_start_vel + 1 > (input.x2 / x_start_vel + 1) / 2)
+                || (x_step_upper != 0 && y_start_vel + 1 > (input.x2 / x_start_vel + 1) / 2)
             {
                 break;
             }
             // find x_step_lower and x_step_upper
-            let x_step_lower = compute_lower_bound(x_start_vel as f64, input.x1 as f64);
-            let x_step_upper = compute_upper_bound(x_start_vel as f64, input.x2 as f64);
 
             let y_step_lower =
                 -1 * compute_upper_bound(-1f64 * y_start_vel as f64, input.y1 as f64);
